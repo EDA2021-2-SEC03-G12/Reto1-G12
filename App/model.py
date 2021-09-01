@@ -35,14 +35,63 @@ Se define la estructura de un catálogo de videos. El catálogo tendrá dos list
 los mismos.
 """
 
-# Construccion de modelos
+def newCatalog():
+    """
+    Inicializa el catálogo de obras. Crea una lista vacia para guardar
+    todos los libros, adicionalmente, crea una lista vacia para los autores,
+    una lista vacia para los generos y una lista vacia para la asociación
+    generos y libros. Retorna el catalogo inicializado.
+    """
+    catalog = {'artist': None,
+               'artwork': None,
+               }
 
-# Funciones para agregar informacion al catalogo
+    catalog['artwork'] = lt.newList()
+    catalog['artist'] = lt.newList('ARRAY_LIST',
+                                    cmpfunction=compareartist)
+    
+    return catalog
 
-# Funciones para creacion de datos
+def addartwork(catalog, artwork):
 
-# Funciones de consulta
+    lt.addLast(catalog['artwork'], artwork)
 
-# Funciones utilizadas para comparar elementos dentro de una lista
+    #artists = artwork['artist'].strip("[]")
+    #artists = artist.split(",")
+    
+    #for artist in artists:
+       # addArtworkArtist(catalog, artist.strip(), artwork)
 
-# Funciones de ordenamiento
+def addartist(catalog, artist):
+    # Se adiciona el libro a la lista de libros
+    lt.addLast(catalog['artist'], artist)
+
+def addArtworkArtist(catalog, artistname, artwork):
+    """
+    Adiciona un autor a lista de autores, la cual guarda referencias
+    a los libros de dicho autor
+    """
+    artists = catalog['artist']
+    posartist = lt.isPresent(artists, artistname)
+    if posartist > 0:
+        artist = lt.getElement(artists, posartist)
+    else:
+        artist = newArtist(artistname)
+        lt.addLast(artists, artist)
+    lt.addLast(artist['artwork'], artwork)
+
+
+
+def newArtist(name):
+  
+    artist = {'name': "", "artwork": None  }
+    artist['name'] = name
+    artist['artwork'] = lt.newList('ARRAY_LIST')
+    return artist
+
+
+def compareartist(artistname1, artist):
+    if (artistname1.lower() in artist['name'].lower()):
+        return 0
+    return -1
+
