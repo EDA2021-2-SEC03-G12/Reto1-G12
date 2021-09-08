@@ -52,6 +52,8 @@ def newCatalog():
     
     return catalog
 
+# REQ 0
+
 def addartwork(catalog, artwork):
 
     lt.addLast(catalog['artwork'], artwork)
@@ -80,8 +82,6 @@ def addArtworkArtist(catalog, artistname, artwork):
         lt.addLast(artists, artist)
     lt.addLast(artist['artwork'], artwork)
 
-
-
 def newArtist(name):
   
     artist = {'name': "", "artwork": None  }
@@ -89,9 +89,27 @@ def newArtist(name):
     artist['artwork'] = lt.newList('ARRAY_LIST')
     return artist
 
-
 def compareartist(artistname1, artist):
     if (artistname1.lower() in artist['name'].lower()):
         return 0
     return -1
+
+# REQ 1
+
+def newList():
+    nueva_lista=lt.newList
+    return nueva_lista
+    
+def search_range_info(catalog, fecha_inicio, fecha_fin,lista):
+    
+    for artista in lt.iterator(catalog["artist"]):
+
+        
+    return lista
+
+    
+
+
+
+    
 
