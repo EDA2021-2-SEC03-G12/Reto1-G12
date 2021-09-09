@@ -34,18 +34,13 @@ def loadArtist(catalog):
     """
     Carga todos los tags del archivo y los agrega a la lista de tags
     """
-    tagsfile = cf.data_dir + 'MoMA/Artists-utf8-small.csv'
+    tagsfile = cf.data_dir + 'MoMA/Artists-utf8-large.csv'
     input_file = csv.DictReader(open(tagsfile, encoding='utf-8'))
     for artist in input_file:
         model.addartist(catalog, artist)
 
 # REQ 1
 
-def initList():
-    lista=model.newList()
-    return lista
-
 def artistasCronologicos(catalog, fecha_inicio, fecha_fin, lista):
-    lista=initList()
-    full_list=model.search_range_info(catalog, fecha_inicio, fecha_fin, lista)      
+    full_list=model.search_range_info(catalog, fecha_inicio, fecha_fin)      
     return full_list

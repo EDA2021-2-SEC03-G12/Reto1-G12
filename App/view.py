@@ -15,15 +15,24 @@ operación solicitada
 """
 
 def printMenu():
-    print("Bienvenido a MoMA\'S DATA")
-    print("1 - Cargar información en el catálogo")
-    print("2 - Listar cronológicamente los artistas")
-    print("3 - Listar cronológicamente las adquisiciones ")
-    print("4 - Clasificar las obras de un artista por técnica")
-    print("5 - Clasificar las obras por la nacionalidad de sus creadores")
-    print("6 - Transportar obras de un departamento")
-    print("7 - Proponer una nueva exposición en el museo ")
 
+    print("_____________________________________________________________________")
+    print(" ")
+    print("Bienvenido a MoMA\'S DATA")
+    print(" ")
+    print(" ")
+    print("OPCIONES")
+    print(" ")
+    print("１ - Cargar información en el catálogo.")
+    print("２ - Listar cronológicamente los artistas.")
+    print("３ - Listar cronológicamente las adquisiciones. ")
+    print("４ - Clasificar las obras de un artista por técnica.")
+    print("５ - Clasificar las obras por la nacionalidad de sus creadores.")
+    print("６ - Transportar obras de un departamento.")
+    print("７ - Proponer una nueva exposición en el museo. ")
+    print(" ")
+    print("_____________________________________________________________________")
+    
 catalog = None
 lista = None
 
@@ -53,24 +62,26 @@ while True:
     inputs = input('Seleccione una opción para continuar\n')
     if int(inputs[0]) == 1:
         print("Cargando información de los archivos ....")
+        print("...espere...")
+        print(" ")
         catalog = initCatalog()
         loadData(catalog)
         NUM_WORK=lt.size(catalog['artist'])
-        print('Artistas cargados: ' + str(NUM_WORK))
+        print('ARTISTAS CARGADOS : ' + str(NUM_WORK))
         NUM_ART=lt.size(catalog['artwork'])
-        print('Obras cargados: ' + str(NUM_ART))
-        
+        print('OBRAS CARGADAS : ' + str(NUM_ART))
+        print(" ")
+        print("PRIMEROS ARTISTAS...")
         for i in range (0,3):
             print(lt.getElement(catalog['artist'],NUM_WORK-i))
-
-        for i in range (0,3):
-            print(lt.getElement(catalog['artwork'],NUM_WORK-i))
+        print(" ")
+        #print("PRIMERAS OBRAS...")
+        #for i in range (0,3):
+            #print(lt.getElement(catalog['artwork'],NUM_WORK-i))
 
     elif int(inputs[0]) == 2:
         lista=artistasCronologicos(catalog,lista)
-        print(lista)
-        print(n)
-        print('Hay '+str(lt.size(lista))+ "pintores que cumplen entre esas fechas.")
+        print('Hay '+str(lt.size(lista))+ " pintores que cumplen entre esas fechas.")
         
 
     elif int(inputs[0]) == 3:

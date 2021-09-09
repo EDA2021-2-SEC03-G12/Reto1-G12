@@ -95,16 +95,27 @@ def compareartist(artistname1, artist):
     return -1
 
 # REQ 1
+   
+def search_range_info(catalog, fecha_inicio, fecha_fin):
 
-def newList():
-    nueva_lista=lt.newList
-    return nueva_lista
-    
-def search_range_info(catalog, fecha_inicio, fecha_fin,lista):
-    
+    lista=lt.newList()
+
     for artista in lt.iterator(catalog["artist"]):
+        print(artista)
+        if artista["ArtistBio"]!="":
+            art_fecha=artista["ArtistBio"].split(" ")
+            print(art_fecha)
+            
+            date=art_fecha[-1]
+            if date[0] in "1234567890":
+                if "–" in date:
+                    date=date.split("–")
+                    date=date[0]
 
-        
+                print(date)
+                if int(date) in range(fecha_inicio,fecha_fin):
+                    lt.addLast(lista, artista)
+
     return lista
 
     
