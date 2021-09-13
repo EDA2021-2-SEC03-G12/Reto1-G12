@@ -28,6 +28,7 @@
 import config as cf
 from DISClib.ADT import list as lt
 from DISClib.Algorithms.Sorting import shellsort as sa
+import re
 assert cf
 
 """
@@ -101,24 +102,21 @@ def search_range_info(catalog, fecha_inicio, fecha_fin):
     lista=lt.newList()
 
     for artista in lt.iterator(catalog["artist"]):
-        print(artista)
+
         if artista["ArtistBio"]!="":
             art_fecha=artista["ArtistBio"].split(" ")
-            print(art_fecha)
             
-            date=art_fecha[-1]
-            if date[0] in "1234567890":
-                if "–" in date:
-                    date=date.split("–")
-                    date=date[0]
+            date=art_fecha[-1].strip()
 
-                print(date)
+            if date[0] in "1234567890":
+                date=date[:4]
+
                 if int(date) in range(fecha_inicio,fecha_fin):
                     lt.addLast(lista, artista)
 
     return lista
 
-    
+#REQ 2  
 
 
 
