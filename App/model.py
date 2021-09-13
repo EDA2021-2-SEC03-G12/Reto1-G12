@@ -27,7 +27,7 @@
 
 import config as cf
 from DISClib.ADT import list as lt
-from DISClib.Algorithms.Sorting import shellsort as sa
+from DISClib.Algorithms.Sorting import mergesort as sa
 import re
 assert cf
 
@@ -95,6 +95,16 @@ def compareartist(artistname1, artist):
         return 0
     return -1
 
+def sortArtist(catalog, size, key):
+    # TODO completar modificaciones para el laboratorio 4
+    sub_list = lt.subList(catalog[key], 1, size) 
+    sub_list = sub_list.copy() 
+    start_time = time.process_time() 
+    sorted_list = sa.sort(sub_list, compareratings) 
+    stop_time = time.process_time() 
+    elapsed_time_mseg = (stop_time - start_time)*1000 
+    return elapsed_time_mseg, sorted_list 
+
 # REQ 1
    
 def search_range_info(catalog, fecha_inicio, fecha_fin):
@@ -112,7 +122,9 @@ def search_range_info(catalog, fecha_inicio, fecha_fin):
                 date=date[:4]
 
                 if int(date) in range(fecha_inicio,fecha_fin):
+                    artista["DATE"]=int(date)
                     lt.addLast(lista, artista)
+                    #sa(lista, cmpfunction=)
 
     return lista
 

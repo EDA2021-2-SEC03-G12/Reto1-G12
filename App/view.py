@@ -30,7 +30,7 @@ def printMenu():
     print("５ - Clasificar las obras por la nacionalidad de sus creadores.")
     print("６ - Transportar obras de un departamento.")
     print("７ - Proponer una nueva exposición en el museo. ")
-    print("0  - Salir"
+    print("0  - Salir" )
     print(" ")
     print("_____________________________________________________________________")
     
@@ -50,7 +50,7 @@ def loadData(catalog):
 def imprimir_tres(catalog, key):
     for i in range (0,3):
             print(lt.getElement(catalog[key],NUM_WORK-i))
-        print(" ")
+    print(" ")
 
 #REQ 01
 
@@ -78,13 +78,9 @@ while True:
         print('OBRAS CARGADAS : ' + str(NUM_ART))
         print(" ")
         print("PRIMEROS ARTISTAS...")
-        imprimir_tres(ca)
-        for i in range (0,3):
-            print(lt.getElement(catalog['artist'],NUM_WORK-i))
-        print(" ")
+        imprimir_tres(catalog,"artist")
         print("PRIMERAS OBRAS...")
-        for i in range (0,3):
-            print(lt.getElement(catalog['artwork'],NUM_WORK-i))
+        imprimir_tres(catalog,"artwork")
 
     elif int(inputs[0]) == 2:
         lista=artistasCronologicos(catalog,lista)
