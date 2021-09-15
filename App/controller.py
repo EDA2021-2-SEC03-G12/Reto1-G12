@@ -2,20 +2,21 @@
 import model
 import csv
 
-def initCatalog():
+def initCatalog(tipoLista):
     """
     Llama la funcion de inicializacion del catalogo del modelo.
     """
-    catalog = model.newCatalog()
+    catalog = model.newCatalog(tipoLista)
     return catalog
 
-# REQ 0
+# REQ 00
 
 def loadData(catalog):
     """
     Carga los datos de los archivos y cargar los datos en la
     estructura de datos
     """
+    
     loadArtwork(catalog)
     loadArtist(catalog)
     
@@ -39,10 +40,14 @@ def loadArtist(catalog):
     for artist in input_file:
         model.addartist(catalog, artist)
 
-# REQ 1
+# REQ 01
 
-def artistasCronologicos(catalog, fecha_inicio, fecha_fin, lista):
+def artistasCronologicos(catalog, fecha_inicio, fecha_fin):
     full_list=model.search_range_info(catalog, fecha_inicio, fecha_fin)      
     return full_list
 
-#REQ 2
+#REQ 02
+
+def adquisicionesCronologicas(catalog,LenSub,ord):
+    lista=model.search_crono_adquired(catalog['artwork'],LenSub,ord)
+    return lista

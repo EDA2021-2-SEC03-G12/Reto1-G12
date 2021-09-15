@@ -18,10 +18,10 @@ def printMenu():
 
     print("_____________________________________________________________________")
     print(" ")
-    print("Bienvenido a MoMA\'S DATA")
+    print("         Ｂｉｅｎｖｅｎｉｄｏ　ａ　ＭｏＭＡ＇Ｓ　ＤＡＴＡ             ")
     print(" ")
     print(" ")
-    print("OPCIONES")
+    print("                        ｏｐｃｉｏｎｅｓ                           ")
     print(" ")
     print("１ - Cargar información en el catálogo.")
     print("２ - Listar cronológicamente los artistas.")
@@ -35,11 +35,15 @@ def printMenu():
     print("_____________________________________________________________________")
     
 catalog = None
-lista = None
 
 #REQ 00
 def initCatalog():
-    return controller.initCatalog()
+    tipoLista = input('Ingrese S si desea la lista Single Linked o A si la desea Array: ')
+    print("_____________________________________________________________________")
+    print("...ｃａｒｇａｎｄｏ　ｉｎｆｏｒｍａｃｉｏｎ　ｄｅ　ａｒｃｈｉｖｏｓ ....")
+    print("...ｅｓｐｅｒｅ...")
+    print(" ")
+    return controller.initCatalog(tipoLista)
 
 def loadData(catalog):
     """
@@ -54,21 +58,26 @@ def imprimir_tres(catalog, key):
 
 #REQ 01
 
-def artistasCronologicos (catalog,lista):
+def artistasCronologicos (catalog):
     anio_inicio = int(input("Ingrese la fecha de minima de nacimiento: "))
     anio_fin =int(input("Ingrese la fecha maxima de busqueda: "))
-    lista_artistas_crono=controller.artistasCronologicos(catalog, anio_inicio, anio_fin,lista)
+    lista_artistas_crono=controller.artistasCronologicos(catalog, anio_inicio, anio_fin)
     return lista_artistas_crono
     
+#REQ 02
 
+def adquisicionesCronologicas (catalog):
+    LenSub= int(input("Ingrese la longitud(en numeros) de la muestra que desea ver: "))
+    Ordenamiento= input("Ingrese la inicial del tipo de ordenamiento que desea utilizar (I)Insertion,(S)Shell, (M)Merge o (Q)Quick Sort: ")
+
+    lista_adquisiciones_crono=controller.adquisicionesCronologicas(catalog,LenSub,Ordenamiento)
+    return lista_adquisiciones_crono
 
 # MENU PRINCIPAL
 while True:
     printMenu()
     inputs = input('Seleccione una opción para continuar\n')
     if int(inputs[0]) == 1:
-        print("Cargando información de los archivos ....")
-        print("...espere...")
         print(" ")
         catalog = initCatalog()
         loadData(catalog)
@@ -79,16 +88,18 @@ while True:
         print(" ")
         print("PRIMEROS ARTISTAS...")
         imprimir_tres(catalog,"artist")
+        print(" ")
         print("PRIMERAS OBRAS...")
         imprimir_tres(catalog,"artwork")
 
     elif int(inputs[0]) == 2:
-        lista=artistasCronologicos(catalog,lista)
+        lista=artistasCronologicos(catalog)
         print('Hay '+str(lt.size(lista))+ " pintores que cumplen entre esas fechas.")
         
-
     elif int(inputs[0]) == 3:
-        print("No disponible en esta version")
+        lista, tiempo, let =adquisicionesCronologicas(catalog)
+        print('La muestra es de '+str(lt.size(lista))+ " elementos.")
+        print("La funcion " + let+ " tarda " +str(tiempo)+ " milisegundos.")
 
     elif int(inputs[0]) == 4:
         print("No disponible en esta version")

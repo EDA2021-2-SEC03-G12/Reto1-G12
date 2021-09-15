@@ -25,9 +25,14 @@
  """
 
 
+from DISClib.DataStructures.singlelinkedlist import subList
+import time
 import config as cf
 from DISClib.ADT import list as lt
-from DISClib.Algorithms.Sorting import mergesort as sa
+from DISClib.Algorithms.Sorting import mergesort as m
+from DISClib.Algorithms.Sorting import insertionsort as i
+from DISClib.Algorithms.Sorting import shellsort as s
+from DISClib.Algorithms.Sorting import quicksort as q
 import re
 assert cf
 
@@ -36,24 +41,36 @@ Se define la estructura de un catálogo de videos. El catálogo tendrá dos list
 los mismos.
 """
 
-def newCatalog():
+def newCatalog(tipoLista):
     """
     Inicializa el catálogo de obras. Crea una lista vacia para guardar
     todos los libros, adicionalmente, crea una lista vacia para los autores,
     una lista vacia para los generos y una lista vacia para la asociación
     generos y libros. Retorna el catalogo inicializado.
     """
+
+    a="SINGLE_LINKED"
+
+    if tipoLista.lower() == "s":
+       a="SINGLE_LINKED" 
+
+    elif tipoLista.lower() == "a":
+        a="ARRAY_LIST"
+
+    else:
+        print("Valor ingresado no valido se ejecutara por defecto SINGLE LINKED")
+
     catalog = {'artist': None,
                'artwork': None,
                }
 
     catalog['artwork'] = lt.newList()
-    catalog['artist'] = lt.newList('ARRAY_LIST',
+    catalog['artist'] = lt.newList(a,
                                     cmpfunction=compareartist)
     
     return catalog
 
-# REQ 0
+# REQ 00
 
 def addartwork(catalog, artwork):
 
@@ -105,7 +122,7 @@ def sortArtist(catalog, size, key):
     elapsed_time_mseg = (stop_time - start_time)*1000 
     return elapsed_time_mseg, sorted_list 
 
-# REQ 1
+# REQ 01
    
 def search_range_info(catalog, fecha_inicio, fecha_fin):
 
@@ -128,7 +145,54 @@ def search_range_info(catalog, fecha_inicio, fecha_fin):
 
     return lista
 
-#REQ 2  
+#REQ 02  
+
+def search_crono_adquired(catalog,LenSub,orde):
+
+    if LenSub > lt.size(catalog):
+        LenSub=lt.size(catalog)
+
+    let="Merge Sort"
+    a=m
+    inputt=orde.lower()
+    if inputt == "i":
+        let="Insertion Sort"
+        a=i
+    elif inputt == "s":
+        let="Shell Sort"
+        a=s
+    elif inputt == "m":
+        let="Merge Sort"
+        a=m
+    elif inputt == "q":
+        let="Quick Merge"
+        a=q
+    else:
+        print("Entrada no valida se ejecutara Insertion por defecto. ")
+
+    tiempo,listaordenada= sortArtist(catalog,a)
+    
+    return lt.subList(listaordenada,1,LenSub),tiempo,let
+
+def cmpArtworkByDateAcquired(artwork1, artwork2):
+
+    COMP_1=artwork1["DateAcquired"].replace("-","")
+    COMP_2=artwork2["DateAcquired"].replace("-","")
+    if COMP_1=="":
+        COMP_1="0"
+    if COMP_2=="":
+        COMP_2="0"
+
+    return (int(COMP_1) < int(COMP_2))
+
+#DEF FOR SORTING
+
+def sortArtist (catalog,A):
+    start_time = time.process_time() 
+    sorted_list = A.sort(catalog, cmpArtworkByDateAcquired) 
+    stop_time = time.process_time() 
+    elapsed_time_mseg = (stop_time - start_time)*1000 
+    return elapsed_time_mseg, sorted_list 
 
 
 
