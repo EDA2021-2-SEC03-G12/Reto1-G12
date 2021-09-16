@@ -64,7 +64,7 @@ def newCatalog(tipoLista):
                'artwork': None,
                }
 
-    catalog['artwork'] = lt.newList()
+    catalog['artwork'] = lt.newList(a)
     catalog['artist'] = lt.newList(a,
                                     cmpfunction=compareartist)
     
