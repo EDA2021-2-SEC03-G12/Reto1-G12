@@ -117,7 +117,7 @@ def sortArtist(catalog, size, key):
     sub_list = lt.subList(catalog[key], 1, size) 
     sub_list = sub_list.copy() 
     start_time = time.process_time() 
-    sorted_list = sa.sort(sub_list, compareratings) 
+    sorted_list = s.sort(sub_list, compareratings) 
     stop_time = time.process_time() 
     elapsed_time_mseg = (stop_time - start_time)*1000 
     return elapsed_time_mseg, sorted_list 
@@ -170,9 +170,10 @@ def search_crono_adquired(catalog,LenSub,orde):
     else:
         print("Entrada no valida se ejecutara Insertion por defecto. ")
 
-    tiempo,listaordenada= sortArtist(catalog,a)
+    catalogo=lt.subList(catalog,1,LenSub)
+    tiempo,listaordenada= sortArtist(catalogo,a)
     
-    return lt.subList(listaordenada,1,LenSub),tiempo,let
+    return listaordenada,tiempo,let
 
 def cmpArtworkByDateAcquired(artwork1, artwork2):
 

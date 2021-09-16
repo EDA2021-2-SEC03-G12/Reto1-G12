@@ -36,7 +36,7 @@ assert cf
 """
 
 
-def sort(lst, lo, hi, cmpfunction):
+def partition(lst, lo, hi, cmpfunction):
     """
     Función que va dejando el pivot en su lugar, mientras mueve
     elementos menores a la izquierda del pivot y elementos mayores a

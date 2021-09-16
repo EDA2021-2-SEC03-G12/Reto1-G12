@@ -117,3 +117,8 @@ while True:
         sys.exit(0)
 sys.exit(0)
 
+if _name_ == "__main__":
+    threading.stack_size(67108864)  # 64MB stack
+    sys.setrecursionlimit(2 ** 20)
+    thread = threading.Thread(target=thread_cycle)
+    thread.start()
