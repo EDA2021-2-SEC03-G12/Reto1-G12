@@ -26,7 +26,7 @@ def loadArtwork(catalog):
     cada uno de ellos, se crea en la lista de autores, a dicho autor y una
     referencia al libro que se esta procesando.
     """
-    artworkfile = cf.data_dir + '\MoMA\Artworks-utf8-10pct.csv'
+    artworkfile = cf.data_dir + '\MoMA\Artworks-utf8-80pct.csv'
     input_file = csv.DictReader(open(artworkfile, encoding='utf-8'))
     for artwork in input_file:
         model.addartwork(catalog, artwork)
