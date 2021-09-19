@@ -73,14 +73,13 @@ def newCatalog(tipoLista):
 # REQ 00
 
 def addartwork(catalog, artwork):
-
     lt.addLast(catalog['artwork'], artwork)
 
-    #artists = artwork['artist'].strip("[]")
-    #artists = artist.split(",")
+    artists = artwork['ConstituentID'].strip("[]")
+    artists = artists.split(",")
     
-    #for artist in artists:
-       # addArtworkArtist(catalog, artist.strip(), artwork)
+    for artist in artists:
+        addArtworkArtist(catalog, artist.strip(), artwork)
 
 def addartist(catalog, artist):
     # Se adiciona el libro a la lista de libros
@@ -141,9 +140,12 @@ def search_range_info(catalog, fecha_inicio, fecha_fin):
                 if int(date) in range(fecha_inicio,fecha_fin):
                     artista["DATE"]=int(date)
                     lt.addLast(lista, artista)
-                    #sa(lista, cmpfunction=)
+                    s.sort(lista, cmpfunction=comparedate)
 
     return lista
+
+def comparedate (artist1, artist2):
+    return artist1["DATE"]<artist2["DATE"]
 
 #REQ 02  
 
