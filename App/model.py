@@ -49,7 +49,7 @@ def newCatalog(tipoLista):
     generos y libros. Retorna el catalogo inicializado.
     """
 
-    a="SINGLE_LINKED"
+    a="ARRAY_LIST"
 
     if tipoLista.lower() == "s":
        a="SINGLE_LINKED" 
@@ -58,77 +58,37 @@ def newCatalog(tipoLista):
         a="ARRAY_LIST"
 
     else:
-        print("Valor ingresado no valido se ejecutara por defecto SINGLE LINKED")
+        print("Valor ingresado no valido se ejecutara por defecto ARRAY LIST")
 
     catalog = {'artist': None,
                'artwork': None,
                }
 
     catalog['artwork'] = lt.newList(a)
-    catalog['artist'] = lt.newList(a,
-                                    cmpfunction=compareartist)
+    catalog['artist'] = lt.newList(a)
     
     return catalog
 
 # REQ 00
+
 
 def addartwork(catalog, artwork):
     lt.addLast(catalog['artwork'], artwork)
 
     artists = artwork['ConstituentID'].strip("[]")
     artists = artists.split(",")
-    
-    for artist in artists:
-        addArtworkArtist(catalog, artist.strip(), artwork)
 
 def addartist(catalog, artist):
-    # Se adiciona el libro a la lista de libros
     lt.addLast(catalog['artist'], artist)
 
-def addArtworkArtist(catalog, artistname, artwork):
-    """
-    Adiciona un autor a lista de autores, la cual guarda referencias
-    a los libros de dicho autor
-    """
-    artists = catalog['artist']
-    posartist = lt.isPresent(artists, artistname)
-    if posartist > 0:
-        artist = lt.getElement(artists, posartist)
-    else:
-        artist = newArtist(artistname)
-        lt.addLast(artists, artist)
-    lt.addLast(artist['artwork'], artwork)
-
-def newArtist(name):
-  
-    artist = {'name': "", "artwork": None  }
-    artist['name'] = name
-    artist['artwork'] = lt.newList('ARRAY_LIST')
-    return artist
-
-def compareartist(artistname1, artist):
-    if (artistname1.lower() in artist['name'].lower()):
-        return 0
-    return -1
-
-def sortArtist(catalog, size, key):
-    # TODO completar modificaciones para el laboratorio 4
-    sub_list = lt.subList(catalog[key], 1, size) 
-    sub_list = sub_list.copy() 
-    start_time = time.process_time() 
-    sorted_list = s.sort(sub_list, compareratings) 
-    stop_time = time.process_time() 
-    elapsed_time_mseg = (stop_time - start_time)*1000 
-    return elapsed_time_mseg, sorted_list 
 
 # REQ 01
    
 def search_range_info(catalog, fecha_inicio, fecha_fin):
 
     lista=lt.newList()
-
+    
     for artista in lt.iterator(catalog["artist"]):
-
         if artista["ArtistBio"]!="":
             art_fecha=artista["ArtistBio"].split(" ")
             
@@ -137,7 +97,8 @@ def search_range_info(catalog, fecha_inicio, fecha_fin):
             if date[0] in "1234567890":
                 date=date[:4]
 
-                if int(date) in range(fecha_inicio,fecha_fin):
+                if int(date) in range(fecha_inicio,fecha_fin+1):
+                    
                     artista["DATE"]=int(date)
                     lt.addLast(lista, artista)
                     s.sort(lista, cmpfunction=comparedate)
@@ -188,14 +149,86 @@ def cmpArtworkByDateAcquired(artwork1, artwork2):
 
     return (int(COMP_1) < int(COMP_2))
 
-#DEF FOR SORTING
-
 def sortArtist (catalog,A):
     start_time = time.process_time() 
     sorted_list = A.sort(catalog, cmpArtworkByDateAcquired) 
     stop_time = time.process_time() 
     elapsed_time_mseg = (stop_time - start_time)*1000 
     return elapsed_time_mseg, sorted_list 
+
+#REQ 03
+
+def tecnicaArtista (catalog,nombre,dic,dic2):
+
+    for artista in lt.iterator(catalog["artist"]):
+        if artista["DisplayName"]==nombre:
+            compare=artista["ConstituentID"]
+            break
+
+    for obra in lt.iterator(catalog["artwork"]):
+        element=obra["ConstituentID"].strip('[]')
+        element=element.split(",")
+        if compare in element:
+            medio=obra["Medium"]
+            if medio not in dic:
+                dic[medio]=1
+                dic2["Obras"+medio]=[dict(obra)]
+            else:
+                dic[medio]+=1
+                dic2["Obras"+medio]=dic2["Obras"+medio].append(dict(obra))
+    
+    value=0
+    for keys,values in dic.items():
+        if values>value:
+            value=values
+            key=keys
+
+    return {"TOTALOBRAS":len(dic2.values()),"TOTALTECNICAS":len(dic),
+            "TECNICATOP":key,"OBRAS POR LA TECNICA": dic2["Obras"+key]}  
+        
+
+#REQ 05
+
+def transporteobras(catalog,depmuseo):
+    obrasdep=[]
+    for obra in lt.iterator(catalog["artwork"]):
+        if obra["Department"]==depmuseo:
+            obrasdep.append(obra)
+            calculos=sumasdeobras(obra)
+
+    return calculos
+
+
+def sumasdeobras(obra):
+    dimen=obra["Dimensions"]
+    weigh=obra["Weight (kg)"]
+
+    if weigh!="":
+        a=72.00/int(weigh)
+    
+    if dimen!="":
+        size=dimen.split("\"")
+        size=size[-1].strip()
+        size=size.strip("()[]cm ")
+        size=eval(size.replace("×","*"))
+        
+        precio_dimen=72.00/(size*(10**(-4)))
+        
+        #b=72.00
+  
+        print(precio_dimen)
+
+    return size,weigh
+            
+
+
+            
+
+
+
+
+
+
 
 
 

@@ -51,10 +51,12 @@ def loadData(catalog):
     """
     controller.loadData(catalog)
 
-def imprimir_tres(catalog, key):
+def imprimir_tres(catalog,pos):
     for i in range (0,3):
-            print(lt.getElement(catalog[key],NUM_WORK-i))
+            print(lt.getElement(catalog,abs(pos-i)))
     print(" ")
+
+
 
 #REQ 01
 
@@ -73,6 +75,20 @@ def adquisicionesCronologicas (catalog):
     lista_adquisiciones_crono=controller.adquisicionesCronologicas(catalog,LenSub,Ordenamiento)
     return lista_adquisiciones_crono
 
+#REQ 03
+
+def artistatecnica(catalogo):
+    name=input("Ingrese el nombre del artista: ")
+    lista=controller.portecnica(catalog, name)
+    return lista
+
+#REQ 05
+
+def costo(catalog):
+    name=input("Ingrese el nombre del departamento: ")
+    lista=controller.costo(catalog,name)
+    return lista
+
 # MENU PRINCIPAL
 while True:
     printMenu()
@@ -87,14 +103,17 @@ while True:
         print('OBRAS CARGADAS : ' + str(NUM_ART))
         print(" ")
         print("PRIMEROS ARTISTAS...")
-        imprimir_tres(catalog,"artist")
+        imprimir_tres(catalog["artist"],0)
         print(" ")
         print("PRIMERAS OBRAS...")
-        imprimir_tres(catalog,"artwork")
+        imprimir_tres(catalog["artwork"],0)
 
     elif int(inputs[0]) == 2:
         lista=artistasCronologicos(catalog)
         print('Hay '+str(lt.size(lista))+ " pintores que cumplen entre esas fechas.")
+        imprimir_tres(lista,3)
+        imprimir_tres(lista,lt.size(lista))
+        
         
     elif int(inputs[0]) == 3:
         lista, tiempo, let =adquisicionesCronologicas(catalog)
@@ -102,13 +121,15 @@ while True:
         print("La funcion " + let+ " tarda " +str(tiempo)+ " milisegundos.")
 
     elif int(inputs[0]) == 4:
-        print("No disponible en esta version")
+        lista=artistatecnica(catalog)
+        print(lista)
 
     elif int(inputs[0]) == 5:
         print("No disponible en esta version")
 
     elif int(inputs[0]) == 6:
-        print("No disponible en esta version")
+        lista=costo(catalog)
+        #print(lista)
 
     elif int(inputs[0]) == 7:
         print("No disponible en esta version")

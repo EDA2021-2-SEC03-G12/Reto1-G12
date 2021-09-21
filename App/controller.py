@@ -16,7 +16,6 @@ def loadData(catalog):
     Carga los datos de los archivos y cargar los datos en la
     estructura de datos
     """
-    
     loadArtwork(catalog)
     loadArtist(catalog)
     
@@ -46,4 +45,18 @@ def artistasCronologicos(catalog, fecha_inicio, fecha_fin):
 
 def adquisicionesCronologicas(catalog,LenSub,ord):
     lista=model.search_crono_adquired(catalog['artwork'],LenSub,ord)
+    return lista
+
+#REQ 03
+
+def portecnica(catalog, name):
+    dic={}
+    dic2={}
+    lista=model.tecnicaArtista(catalog,name,dic,dic2)
+    return lista
+
+#REQ 05
+
+def costo(catalog,depname):
+    lista=model.transporteobras(catalog,depname)
     return lista
