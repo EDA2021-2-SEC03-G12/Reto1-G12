@@ -43,8 +43,8 @@ def artistasCronologicos(catalog, fecha_inicio, fecha_fin):
 
 #REQ 02
 
-def adquisicionesCronologicas(catalog,LenSub,ord):
-    lista=model.search_crono_adquired(catalog['artwork'],LenSub,ord)
+def adquisicionesCronologicas(catalog,LenSub,ord,FI,FF):
+    lista=model.search_crono_adquired(catalog['artwork'],LenSub,ord,FI,FF)
     return lista
 
 #REQ 03
@@ -53,6 +53,12 @@ def portecnica(catalog, name):
     dic={}
     dic2={}
     lista=model.tecnicaArtista(catalog,name,dic,dic2)
+    return lista
+
+#REQ 04
+
+def artistasNacionalidad(catalog,LenSub):
+    lista=model.search_nationality(catalog,LenSub)
     return lista
 
 #REQ 05

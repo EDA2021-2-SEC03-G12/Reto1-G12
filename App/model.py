@@ -30,7 +30,7 @@ import time
 import config as cf
 from DISClib.ADT import list as lt
 from DISClib.Algorithms.Sorting import mergesort as m
-from DISClib.Algorithms.Sorting import insertionsort as i
+from DISClib.Algorithms.Sorting import insertionsort as u
 from DISClib.Algorithms.Sorting import shellsort as s
 from DISClib.Algorithms.Sorting import quicksort as q
 import re
@@ -100,8 +100,7 @@ def comparedate (artist1, artist2):
 
 #REQ 02  
 
-
-def search_crono_adquired(catalog,LenSub,orde):
+def search_crono_adquired(catalog,LenSub,orde,FI,FF):
 
     if LenSub > lt.size(catalog):
         LenSub=lt.size(catalog)
@@ -124,10 +123,9 @@ def search_crono_adquired(catalog,LenSub,orde):
     else:
         print("Entrada no valida se ejecutara Insertion por defecto. ")
 
-    catalogo=lt.subList(catalog,1,LenSub)
-    tiempo,listaordenada= sortArtist(catalogo,a)
-    
-    return listaordenada,tiempo,let
+    tiempo,listaordenada= sortArtist(catalog,a)
+
+    return lt.subList(listaordenada,1,LenSub),tiempo,let
 
 def cmpArtworkByDateAcquired(artwork1, artwork2):
 
@@ -139,6 +137,7 @@ def cmpArtworkByDateAcquired(artwork1, artwork2):
         COMP_2="0"
 
     return (int(COMP_1) < int(COMP_2))
+
 
 def sortArtist (catalog,A):
     start_time = time.process_time() 
@@ -168,13 +167,15 @@ def tecnicaArtista (catalog,nombre,dic,dic2):
             element=element.split(",")
             if compare in element:
                 medio=obra["Medium"]
-                if medio not in dic:
-                    dic[medio]=1
-                    dic2["Obras"+medio]=[dict(obra)]
-                else:
+                if medio in dic:
                     dic[medio]+=1
-                    dic2["Obras"+medio]=dic2["Obras"+medio].append(dict(obra))
-    
+                    lt.addLast(dic2["Obras"+medio],dict(obra))       
+                else:
+                    dic[medio]=1
+                    dic2["Obras"+medio]=lt.newList("ARRAY_LIST")
+                    lt.addLast(dic2["Obras"+medio],dict(obra))
+
+
         value=0
         key=medio
         for keys,values in dic.items():
@@ -182,14 +183,41 @@ def tecnicaArtista (catalog,nombre,dic,dic2):
                 value=values
                 key=keys
 
-        a={"TOTALOBRAS":len(dic2.values()),"TOTALTECNICAS":len(dic),
-            "TECNICATOP":key,"OBRAS POR LA TECNICA": dic2["Obras"+key]}  
+        ttlobras=0
+        for lista in dic2.values():
+            ttlobras+=lt.size(lista)
 
+
+        a={"TOTALOBRAS":ttlobras,"TOTALTECNICAS":len(dic2.keys()),
+            "TECNICATOP":key,"OBRAS POR LA TECNICA": dic2["Obras"+key]}  
     stop_time = time.process_time() 
     elapsed_time_mseg = (stop_time - start_time)*1000  
 
     return a,elapsed_time_mseg  
-        
+
+#REQ 04
+
+def search_nationality(catalog,LenSub):
+
+    if LenSub > lt.size(catalog):
+        LenSub=lt.size(catalog)
+
+    catalogo=lt.subList(catalog,1,LenSub)
+    tiempo,listaordenada= sortNationality(catalogo,orde)
+    
+    return listaordenada,tiempo
+
+def cmpNationality(nationality1, nationality2):
+
+    COMP_1=nationality1["Nationality"]
+    COMP_2=nationality2["Nationality"]
+    if COMP_1=="":
+        COMP_1="0"  
+    if COMP_2=="":
+        COMP_2="0"
+
+    return (int(COMP_1) < int(COMP_2))
+
 #REQ 05
 
 def transporteobras(catalog,depmuseo):
@@ -327,7 +355,21 @@ def compareold(obra1,obra2):
 
     return a<b
 
+#DEF FOR SORTING
 
+def sortArtist (catalog,A):
+    start_time = time.process_time() 
+    sorted_list = A.sort(catalog, cmpArtworkByDateAcquired) 
+    stop_time = time.process_time() 
+    elapsed_time_mseg = (stop_time - start_time)*1000 
+    return elapsed_time_mseg, sorted_list 
+  
+def sortNationality(catalog,A):
+    start_time = time.process_time() 
+    sorted_list = A.sort(catalog, cmpNationality) 
+    stop_time = time.process_time() 
+    elapsed_time_mseg = (stop_time - start_time)*1000 
+    return elapsed_time_mseg, sorted_list 
 
 
 

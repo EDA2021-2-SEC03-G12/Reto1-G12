@@ -72,13 +72,15 @@ def artistasCronologicos (catalog):
     lista_artistas_crono=controller.artistasCronologicos(catalog, anio_inicio, anio_fin)
     return lista_artistas_crono
  
+
 #REQ 02
 
 def adquisicionesCronologicas (catalog):
     LenSub= int(input("Ingrese la longitud(en numeros) de la muestra que desea ver: "))
     Ordenamiento= input("Ingrese la inicial del tipo de ordenamiento que desea utilizar (I)Insertion,(S)Shell, (M)Merge o (Q)Quick Sort: ")
-
-    lista_adquisiciones_crono=controller.adquisicionesCronologicas(catalog,LenSub,Ordenamiento)
+    fechainicio=int(input("Ingrese la fecha de minima de busqueda (AAAA-MM-DD): "))
+    fechafin=int(input("Ingrese la fecha maxima de busqueda (AAAA-MM-DD): "))
+    lista_adquisiciones_crono=controller.adquisicionesCronologicas(catalog,LenSub,Ordenamiento,fechainicio,fechafin)
     return lista_adquisiciones_crono
 
 #REQ 03
@@ -87,6 +89,14 @@ def artistatecnica(catalogo):
     name=input("Ingrese el nombre del artista: ")
     lista=controller.portecnica(catalog, name)
     return lista
+
+#REQ 04
+def artistasNacionalidad(catalog):
+    
+    LenSub= int(input("Ingrese la longitud(en numeros) de la muestra que desea ver: "))
+    
+    lista_adquisiciones_crono=controller.artistasNacionalidad(catalog,LenSub)
+    return lista_adquisiciones_crono
 
 #REQ 05
 
@@ -123,16 +133,19 @@ while True:
                 
     elif int(inputs[0]) == 3:
         lista, tiempo, let =adquisicionesCronologicas(catalog)
+        
         print('La muestra es de '+str(lt.size(lista))+ " elementos.")
         print("La funcion " + let+ " tarda " +str(tiempo)+ " milisegundos.")
 
     elif int(inputs[0]) == 4:
         dic,time = artistatecnica(catalog)
-        print(dic)
+        for key,value in dic.items():
+            print(key,value)
         print("La funcion tarda " +str(time)+ " milisegundos.")
 
     elif int(inputs[0]) == 5:
-        print("No disponible en esta version")
+        lista=(artistasNacionalidad(catalog))
+        print(lista)
 
     elif int(inputs[0]) == 6:
         lista,time=costo(catalog)
