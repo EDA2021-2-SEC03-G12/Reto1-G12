@@ -109,27 +109,29 @@ while True:
         imprimir_tres(catalog["artwork"],0)
 
     elif int(inputs[0]) == 2:
-        lista=artistasCronologicos(catalog)
+        lista,time=artistasCronologicos(catalog)
         print('Hay '+str(lt.size(lista))+ " pintores que cumplen entre esas fechas.")
         imprimir_tres(lista,3)
         imprimir_tres(lista,lt.size(lista))
-        
-        
+        print("La funcion tarda " +str(time)+ " milisegundos.")
+                
     elif int(inputs[0]) == 3:
         lista, tiempo, let =adquisicionesCronologicas(catalog)
         print('La muestra es de '+str(lt.size(lista))+ " elementos.")
         print("La funcion " + let+ " tarda " +str(tiempo)+ " milisegundos.")
 
     elif int(inputs[0]) == 4:
-        lista=artistatecnica(catalog)
-        print(lista)
+        dic,time = artistatecnica(catalog)
+        print(dic)
+        print("La funcion " + let+ " tarda " +str(time)+ " milisegundos.")
 
     elif int(inputs[0]) == 5:
         print("No disponible en esta version")
 
     elif int(inputs[0]) == 6:
-        lista=costo(catalog)
-        #print(lista)
+        lista,time=costo(catalog)
+        print(lista)
+        print("La funcion tarda " +str(time)+ " milisegundos.")
 
     elif int(inputs[0]) == 7:
         print("No disponible en esta version")

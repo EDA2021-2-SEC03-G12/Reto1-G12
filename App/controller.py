@@ -38,7 +38,7 @@ def loadArtist(catalog):
 # REQ 01
 
 def artistasCronologicos(catalog, fecha_inicio, fecha_fin):
-    full_list=model.search_range_info(catalog, fecha_inicio, fecha_fin)      
+    full_list=model.sort_fecha(catalog, fecha_inicio, fecha_fin)      
     return full_list
 
 #REQ 02

@@ -71,7 +71,6 @@ def newCatalog(tipoLista):
 
 # REQ 00
 
-
 def addartwork(catalog, artwork):
     lt.addLast(catalog['artwork'], artwork)
 
@@ -81,32 +80,23 @@ def addartwork(catalog, artwork):
 def addartist(catalog, artist):
     lt.addLast(catalog['artist'], artist)
 
-
 # REQ 01
-   
-def search_range_info(catalog, fecha_inicio, fecha_fin):
 
+def sort_fecha(catalog, fecha_inicio, fecha_fin):
+    start_time = time.process_time() 
     lista=lt.newList()
-    
     for artista in lt.iterator(catalog["artist"]):
-        if artista["ArtistBio"]!="":
-            art_fecha=artista["ArtistBio"].split(" ")
-            
-            date=art_fecha[-1].strip()
-
-            if date[0] in "1234567890":
-                date=date[:4]
-
-                if int(date) in range(fecha_inicio,fecha_fin+1):
-                    
-                    artista["DATE"]=int(date)
-                    lt.addLast(lista, artista)
-                    s.sort(lista, cmpfunction=comparedate)
-
-    return lista
+        if artista["BeginDate"]!="":
+            if int(artista["BeginDate"]) in range(fecha_inicio,fecha_fin+1):
+                lt.addLast(lista, artista)
+                
+    s.sort(lista, cmpfunction=comparedate)  
+    stop_time = time.process_time() 
+    elapsed_time_mseg = (stop_time - start_time)*1000           
+    return lista,elapsed_time_mseg
 
 def comparedate (artist1, artist2):
-    return artist1["DATE"]<artist2["DATE"]
+    return artist1["BeginDate"]<artist2["BeginDate"]
 
 #REQ 02  
 
@@ -160,6 +150,9 @@ def sortArtist (catalog,A):
 
 def tecnicaArtista (catalog,nombre,dic,dic2):
 
+    start_time = time.process_time()
+
+    compare=""
     for artista in lt.iterator(catalog["artist"]):
         if artista["DisplayName"]==nombre:
             compare=artista["ConstituentID"]
@@ -183,46 +176,147 @@ def tecnicaArtista (catalog,nombre,dic,dic2):
             value=values
             key=keys
 
-    return {"TOTALOBRAS":len(dic2.values()),"TOTALTECNICAS":len(dic),
-            "TECNICATOP":key,"OBRAS POR LA TECNICA": dic2["Obras"+key]}  
-        
+    stop_time = time.process_time() 
+    elapsed_time_mseg = (stop_time - start_time)*1000  
 
+    return {"TOTALOBRAS":len(dic2.values()),"TOTALTECNICAS":len(dic),
+            "TECNICATOP":key,"OBRAS POR LA TECNICA": dic2["Obras"+key]},elapsed_time_mseg  
+        
 #REQ 05
 
 def transporteobras(catalog,depmuseo):
-    obrasdep=[]
+    start_time = time.process_time()
+
+    obrasdep=lt.newList()
+    sumattl=0
+    pesottl=0
     for obra in lt.iterator(catalog["artwork"]):
         if obra["Department"]==depmuseo:
-            obrasdep.append(obra)
-            calculos=sumasdeobras(obra)
+            lt.addLast(obrasdep,obra)
+            calculos=sumasdeobras(dict(obra))
+            obra["PRICE"]=calculos
+            sumattl+=calculos
+            pesopieza=obra["Weight (kg)"].strip()
+            if pesopieza!="":
+                pesottl+=pesopieza
+    
+    obrasantiguas5=s.sort(obrasdep,cmpfunction=compareold)
+    obrasantiguas5=lt.subList(obrasantiguas5,1,5)
 
-    return calculos
+    obrascostosas=s.sort(obrasdep,cmpfunction=compareprice)
+    obrascostosas=lt.subList(obrascostosas,1,5)
 
+    stop_time = time.process_time() 
+    elapsed_time_mseg = (stop_time - start_time)*1000  
+
+    return {"TOTAL OBRAS":lt.size(obrasdep),"ESTIMADO USD": sumattl,"PESO ESTIMADO":pesottl,
+    "OBRAS ANTIGUAS":obrasantiguas5, "OBRAS COSTOSAS": obrascostosas},elapsed_time_mseg
 
 def sumasdeobras(obra):
-    dimen=obra["Dimensions"]
-    weigh=obra["Weight (kg)"]
 
-    if weigh!="":
-        a=72.00/int(weigh)
-    
+    dimen=obra["Dimensions"]
+    otros=list(obra.values())
+    d=otros[13:21]
+
+    #['Circumference (cm)', 'Depth (cm)',
+    #'Diameter (cm)', 'Height (cm)', 'Length (cm)',
+    #'Weight (kg)', 'Width (cm)', 'Seat Height (cm)']
+    circulo= d[2]!=""
+    circulo2= d[0]!=""
+
+    rectangle= d[3]!="" and d[4]!=""
+    rectangle2= d[6]!="" and d[7]!=""
+
+    cubo= d[3]!="" and d[4]!="" and d[6]!=""
+    cubo2= d[1]!= "" and d[3]!= "" and d[4]!= "" 
+
+    peso=d[5]!=""
+
+    #ASIGNACIONES:
+    mayorprecio=48.00
+    preciocir=0
+    preciocir2=0
+    preciodime=0
+    preciorec=0
+    preciorec2=0
+    preciocub=0
+    preciocub2=0
+    preciopeso=0
+
+    if circulo:
+        b=d[2].strip()
+        preciocir=72.00/((180*(float(b**2)))/4)
+
+    if circulo2:
+        a=d[0].strip()
+        L=(float(a))
+        preciocir2=72.00/((L*(L/360))/2)
+
     if dimen!="":
         size=dimen.split("\"")
         size=size[-1].strip()
         size=size.strip("()[]cm ")
-        size=eval(size.replace("×","*"))
-        
-        precio_dimen=72.00/(size*(10**(-4)))
-        
-        #b=72.00
-  
-        print(precio_dimen)
+        size=size.split("×")
+        preciodimen= rectangulo(size[0],size[1])
 
-    return size,weigh
+    if rectangle:
+        preciorec= rectangulo(d[3],d[4])   
+
+    if rectangle2:
+        preciorec2= rectangulo(d[6],d[7]) 
+
+    if cubo:
+        preciocub= cubos(d[3],d[4],d[6])
+
+    if cubo2:
+        preciocub2= cubos(d[3],d[4],d[1])
+
+    if peso:
+        kg=d[5].strip()
+        preciopeso=72.00/float(kg)
+
+    valormayor=max(preciocir,preciocir2,preciodime, preciorec,preciorec2,preciocub,preciocub2,preciopeso) 
+    if valormayor!=0:
+         mayorprecio=valormayor
+
+    return mayorprecio
             
-
-
+def rectangulo(base,altura):
+    base=base.strip()
+    altura=altura.strip()
+    size=float(base)*float(altura)
+    precio=72.00/(size*(10**(-4)))
+    return precio
             
+def cubos(base,altura, profundidad):
+    base=base.strip()
+    altura=altura.strip()
+    base=profundidad.strip()
+    size=float(base)*float(altura)*float(profundidad)
+    precio=72.00/(size*(10**(-4)))
+    return precio
+
+def compareprice(PRICE1,PRICE2):
+    return PRICE1["PRICE"]<PRICE2["PRICE"]
+
+def compareold(obra1,obra2):
+    a=obra1["Date"]
+    b=obra2["Date"]
+
+    for val in [a,b]:
+        if len(val)>0:
+            if (len(val)==11) or ("c" in val):
+                val=val[-4:]
+            elif "-" in val:
+                val=val[:5]
+            else: 
+                val=0
+
+    return a<b
+
+
+
+
 
 
 
