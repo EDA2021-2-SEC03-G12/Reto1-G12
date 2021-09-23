@@ -51,12 +51,18 @@ def loadData(catalog):
     """
     controller.loadData(catalog)
 
-def imprimir_tres(catalog,pos):
+def imprimir_tres(catalog,pos,a):
     for i in range (0,3):
-            print(lt.getElement(catalog,abs(pos-i)))
+        A=dict(lt.getElement(catalog,abs(pos-i)))
+        if a==2:
+            print({"NOMBRE": A["DisplayName"],
+            "NACIMIENTO": A["BeginDate"],
+            "FALLECIMIENTO": A["EndDate"],
+            "NACIONALIDAD":A["Nationality"],
+            "GENERO":A["Gender"]})
+        else:
+            print(A)
     print(" ")
-
-
 
 #REQ 01
 
@@ -65,7 +71,7 @@ def artistasCronologicos (catalog):
     anio_fin =int(input("Ingrese la fecha maxima de busqueda: "))
     lista_artistas_crono=controller.artistasCronologicos(catalog, anio_inicio, anio_fin)
     return lista_artistas_crono
-    
+ 
 #REQ 02
 
 def adquisicionesCronologicas (catalog):
@@ -103,16 +109,16 @@ while True:
         print('OBRAS CARGADAS : ' + str(NUM_ART))
         print(" ")
         print("PRIMEROS ARTISTAS...")
-        imprimir_tres(catalog["artist"],0)
+        imprimir_tres(catalog["artist"],0,0)
         print(" ")
         print("PRIMERAS OBRAS...")
-        imprimir_tres(catalog["artwork"],0)
+        imprimir_tres(catalog["artwork"],0,0)
 
     elif int(inputs[0]) == 2:
         lista,time=artistasCronologicos(catalog)
         print('Hay '+str(lt.size(lista))+ " pintores que cumplen entre esas fechas.")
-        imprimir_tres(lista,3)
-        imprimir_tres(lista,lt.size(lista))
+        imprimir_tres(lista,3,2)
+        imprimir_tres(lista,lt.size(lista),2)
         print("La funcion tarda " +str(time)+ " milisegundos.")
                 
     elif int(inputs[0]) == 3:
@@ -123,7 +129,7 @@ while True:
     elif int(inputs[0]) == 4:
         dic,time = artistatecnica(catalog)
         print(dic)
-        print("La funcion " + let+ " tarda " +str(time)+ " milisegundos.")
+        print("La funcion tarda " +str(time)+ " milisegundos.")
 
     elif int(inputs[0]) == 5:
         print("No disponible en esta version")

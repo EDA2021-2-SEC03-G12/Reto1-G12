@@ -21,7 +21,7 @@ def loadData(catalog):
     
 def loadArtwork(catalog):
 
-    artworkfile = cf.data_dir + '\MoMA\Artworks-utf8-small.csv'
+    artworkfile = cf.data_dir + '\MoMA\Artworks-utf8-10pct.csv'
     input_file = csv.DictReader(open(artworkfile, encoding='utf-8'))
     for artwork in input_file:
         model.addartwork(catalog, artwork)
@@ -30,7 +30,7 @@ def loadArtist(catalog):
     """
     Carga todos los tags del archivo y los agrega a la lista de tags
     """
-    tagsfile = cf.data_dir + 'MoMA/Artists-utf8-small.csv'
+    tagsfile = cf.data_dir + 'MoMA/Artists-utf8-10pct.csv'
     input_file = csv.DictReader(open(tagsfile, encoding='utf-8'))
     for artist in input_file:
         model.addartist(catalog, artist)

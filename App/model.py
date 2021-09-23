@@ -100,6 +100,7 @@ def comparedate (artist1, artist2):
 
 #REQ 02  
 
+
 def search_crono_adquired(catalog,LenSub,orde):
 
     if LenSub > lt.size(catalog):
@@ -153,34 +154,41 @@ def tecnicaArtista (catalog,nombre,dic,dic2):
     start_time = time.process_time()
 
     compare=""
+    a={"TOTALOBRAS":"NO HAY OBRAS","TOTALTECNICAS":0,
+            "TECNICATOP":"","OBRAS POR LA TECNICA":0}
     for artista in lt.iterator(catalog["artist"]):
         if artista["DisplayName"]==nombre:
             compare=artista["ConstituentID"]
             break
 
-    for obra in lt.iterator(catalog["artwork"]):
-        element=obra["ConstituentID"].strip('[]')
-        element=element.split(",")
-        if compare in element:
-            medio=obra["Medium"]
-            if medio not in dic:
-                dic[medio]=1
-                dic2["Obras"+medio]=[dict(obra)]
-            else:
-                dic[medio]+=1
-                dic2["Obras"+medio]=dic2["Obras"+medio].append(dict(obra))
+
+    if compare!="":
+        for obra in lt.iterator(catalog["artwork"]):
+            element=obra["ConstituentID"].strip('[]')
+            element=element.split(",")
+            if compare in element:
+                medio=obra["Medium"]
+                if medio not in dic:
+                    dic[medio]=1
+                    dic2["Obras"+medio]=[dict(obra)]
+                else:
+                    dic[medio]+=1
+                    dic2["Obras"+medio]=dic2["Obras"+medio].append(dict(obra))
     
-    value=0
-    for keys,values in dic.items():
-        if values>value:
-            value=values
-            key=keys
+        value=0
+        key=medio
+        for keys,values in dic.items():
+            if values>value:
+                value=values
+                key=keys
+
+        a={"TOTALOBRAS":len(dic2.values()),"TOTALTECNICAS":len(dic),
+            "TECNICATOP":key,"OBRAS POR LA TECNICA": dic2["Obras"+key]}  
 
     stop_time = time.process_time() 
     elapsed_time_mseg = (stop_time - start_time)*1000  
 
-    return {"TOTALOBRAS":len(dic2.values()),"TOTALTECNICAS":len(dic),
-            "TECNICATOP":key,"OBRAS POR LA TECNICA": dic2["Obras"+key]},elapsed_time_mseg  
+    return a,elapsed_time_mseg  
         
 #REQ 05
 
@@ -198,7 +206,7 @@ def transporteobras(catalog,depmuseo):
             sumattl+=calculos
             pesopieza=obra["Weight (kg)"].strip()
             if pesopieza!="":
-                pesottl+=pesopieza
+                pesottl+=float(pesopieza)
     
     obrasantiguas5=s.sort(obrasdep,cmpfunction=compareold)
     obrasantiguas5=lt.subList(obrasantiguas5,1,5)
@@ -236,7 +244,7 @@ def sumasdeobras(obra):
     mayorprecio=48.00
     preciocir=0
     preciocir2=0
-    preciodime=0
+    preciodimen=0
     preciorec=0
     preciorec2=0
     preciocub=0
@@ -244,20 +252,23 @@ def sumasdeobras(obra):
     preciopeso=0
 
     if circulo:
-        b=d[2].strip()
-        preciocir=72.00/((180*(float(b**2)))/4)
+        b=float(d[2].strip())
+        preciocir=72.00/((180*((b**2)))/4)
 
     if circulo2:
         a=d[0].strip()
         L=(float(a))
         preciocir2=72.00/((L*(L/360))/2)
 
-    if dimen!="":
+    if dimen!="" and len(dimen)<10:
         size=dimen.split("\"")
         size=size[-1].strip()
         size=size.strip("()[]cm ")
         size=size.split("×")
-        preciodimen= rectangulo(size[0],size[1])
+        if len(size)==2:
+            preciodimen=rectangulo(size[0],size[1])
+        else:
+            preciodimen=48.00
 
     if rectangle:
         preciorec= rectangulo(d[3],d[4])   
@@ -275,14 +286,16 @@ def sumasdeobras(obra):
         kg=d[5].strip()
         preciopeso=72.00/float(kg)
 
-    valormayor=max(preciocir,preciocir2,preciodime, preciorec,preciorec2,preciocub,preciocub2,preciopeso) 
+    valormayor=max(preciocir,preciocir2,preciodimen, preciorec,preciorec2,preciocub,preciocub2,preciopeso) 
     if valormayor!=0:
          mayorprecio=valormayor
 
     return mayorprecio
             
 def rectangulo(base,altura):
-    base=base.strip()
+    base=base.replace("cm"," ")
+    base=base.strip()  
+    altura=altura.replace("cm"," ")
     altura=altura.strip()
     size=float(base)*float(altura)
     precio=72.00/(size*(10**(-4)))
