@@ -72,7 +72,6 @@ def artistasCronologicos (catalog):
     lista_artistas_crono=controller.artistasCronologicos(catalog, anio_inicio, anio_fin)
     return lista_artistas_crono
  
-
 #REQ 02
 
 def adquisicionesCronologicas (catalog):
@@ -81,6 +80,16 @@ def adquisicionesCronologicas (catalog):
     fechainicio=int(input("Ingrese la fecha de minima de busqueda (AAAA-MM-DD): "))
     fechafin=int(input("Ingrese la fecha maxima de busqueda (AAAA-MM-DD): "))
     lista_adquisiciones_crono=controller.adquisicionesCronologicas(catalog,LenSub,Ordenamiento,fechainicio,fechafin)
+    return lista_adquisiciones_crono
+
+#REQ 02 CORRECTION
+
+def adquisicionesCronologicas2 (catalog):
+    LenSub= int((input("Ingrese la longitud(en numeros) de la muestra que desea ver: ")))
+    Ordenamiento= input("Ingrese la inicial del tipo de ordenamiento que desea utilizar (I)Insertion,(S)Shell, (M)Merge o (Q)Quick Sort: ")
+    fechainicio=int(input(("Ingrese la fecha de minima de busqueda (AAAA-MM-DD): ").strip("-")))
+    fechafin=int((input("Ingrese la fecha maxima de busqueda (AAAA-MM-DD): ")).strip("-"))
+    lista_adquisiciones_crono=controller.adquisicionesCronologicas2(catalog,LenSub,fechainicio,fechafin)
     return lista_adquisiciones_crono
 
 #REQ 03
@@ -135,6 +144,7 @@ while True:
         lista, tiempo, let =adquisicionesCronologicas(catalog)
         
         print('La muestra es de '+str(lt.size(lista))+ " elementos.")
+        print(lista)
         print("La funcion " + let+ " tarda " +str(tiempo)+ " milisegundos.")
 
     elif int(inputs[0]) == 4:

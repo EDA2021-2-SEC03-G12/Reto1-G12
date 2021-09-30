@@ -47,6 +47,13 @@ def adquisicionesCronologicas(catalog,LenSub,ord,FI,FF):
     lista=model.search_crono_adquired(catalog['artwork'],LenSub,ord,FI,FF)
     return lista
 
+#REQ 02 CORRECTION
+
+def adquisicionesCronologicas2(catalog,LenSub,ord,FI,FF):
+    lista=model.search_crono_adquired2(catalog['artwork'],LenSub,ord,FI,FF)
+    return lista
+
+
 #REQ 03
 
 def portecnica(catalog, name):

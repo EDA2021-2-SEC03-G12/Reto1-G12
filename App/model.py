@@ -110,7 +110,7 @@ def search_crono_adquired(catalog,LenSub,orde,FI,FF):
     inputt=orde.lower()
     if inputt == "i":
         let="Insertion Sort"
-        a=i
+        a=u
     elif inputt == "s":
         let="Shell Sort"
         a=s
@@ -138,7 +138,6 @@ def cmpArtworkByDateAcquired(artwork1, artwork2):
 
     return (int(COMP_1) < int(COMP_2))
 
-
 def sortArtist (catalog,A):
     start_time = time.process_time() 
     sorted_list = A.sort(catalog, cmpArtworkByDateAcquired) 
@@ -146,6 +145,53 @@ def sortArtist (catalog,A):
     elapsed_time_mseg = (stop_time - start_time)*1000 
     return elapsed_time_mseg, sorted_list 
 
+#REQ 02 CORRECTION
+
+def search_crono_adquired2(catalog,LenSub,orde,FI,FF):
+
+    if LenSub > lt.size(catalog):
+        LenSub=lt.size(catalog)
+
+    let="Merge Sort"
+    a=m
+    inputt=orde.lower()
+    if inputt == "i":
+        let="Insertion Sort"
+        a=u
+    elif inputt == "s":
+        let="Shell Sort"
+        a=s
+    elif inputt == "m":
+        let="Merge Sort"
+        a=m
+    elif inputt == "q":
+        let="Quick Merge"
+        a=q
+    else:
+        print("Entrada no valida se ejecutara Insertion por defecto. ")
+
+    tiempo,listaordenada= sortArtist(catalog,a)
+
+    return lt.subList(listaordenada,1,LenSub),tiempo,let
+
+def cmpArtworkByDateAcquired(artwork1, artwork2):
+
+    COMP_1=artwork1["DateAcquired"].replace("-","")
+    COMP_2=artwork2["DateAcquired"].replace("-","")
+    if COMP_1=="":
+        COMP_1="0"
+    if COMP_2=="":
+        COMP_2="0"
+
+    return (int(COMP_1) < int(COMP_2))
+
+def sortArtist (catalog,A):
+    start_time = time.process_time() 
+    sorted_list = A.sort(catalog, cmpArtworkByDateAcquired) 
+    stop_time = time.process_time() 
+    elapsed_time_mseg = (stop_time - start_time)*1000 
+    return elapsed_time_mseg, sorted_list 
+    
 #REQ 03
 
 def tecnicaArtista (catalog,nombre,dic,dic2):
